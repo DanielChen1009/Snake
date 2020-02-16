@@ -18,6 +18,11 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent evt) {
         this.game.update();
+        if (!this.game.isAlive()) {
+            this.timer.stop();
+
+            return;
+        }
         this.repaint();
     }
 
@@ -39,11 +44,16 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
             }
             rowStartWhite = !rowStartWhite;
         }
+
+        // Place the food on the canvas
         g.setColor(Color.RED);
+        g.fillRect(game.getFood().x * width, game.getFood().y * height, width, height);
+
+        // Place the Snake Body
+        g.setColor(Color.GREEN);
         for(Point point : game.getSnake()) {
             g.fillRect(point.x * width, point.y * height, width, height);
         }
-
     }
 
     @Override
