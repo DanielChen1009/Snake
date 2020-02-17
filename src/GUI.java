@@ -11,18 +11,20 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     private int width, height;
     // Grid width and height.
     private int gWidth = 20;
-    private int gHeight;
+    private int gHeight = 20;
     private Timer timer;
     private Game game;
     private int delay = 100;
     private JSlider speed, gridWidth, gridHeight;
-    // private JSlider pixelSize;
-    private JLabel instructions;
+    private JLabel instructions, speedLabel, widthLabel, heightLabel;
+    // private JSlider pixelSize.
 
     public GUI(int width, int height) {
         this.width = width;
         this.height = height;
 
+        this.speedLabel = new JLabel("Slide to set Speed");
+        this.add(speedLabel);
 
         // Creates speed slider that will control the Speed of the Snake.
         this.speed = new JSlider(50, 250, this.delay);
@@ -41,7 +43,7 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
 
         Font font = new Font(this.speed.getFont().getFontName(), Font.BOLD, 5);
         this.speed.setFont(font);
-        this.speed.setPreferredSize(new Dimension(this.width, this.height / 4));
+        this.speed.setPreferredSize(new Dimension(this.width, this.height / 5));
 
         this.speed.setInverted(true);
         this.speed.addKeyListener(this);
@@ -49,24 +51,28 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         this.add(speed);
 
         // Creates width and height slider
-        this.gridWidth = new JSlider(15, 30, this.gWidth);
+        this.widthLabel = new JLabel("Slide to set Width");
+        this.add(widthLabel);
+        this.gridWidth = new JSlider(15, 40, this.gWidth);
         this.gridWidth.setMajorTickSpacing(5);
         this.gridWidth.setMinorTickSpacing(1);
         this.gridWidth.setPaintTicks(true);
         this.gridWidth.setPaintLabels(true);
-        this.gridWidth.setPreferredSize(new Dimension(this.width, this.height / 4));
+        this.gridWidth.setPreferredSize(new Dimension(this.width, this.height / 5));
 
         this.gridWidth.addKeyListener(this);
         this.gridWidth.addChangeListener(e -> this.gWidth = this.gridWidth.getValue());
         this.add(gridWidth);
 
+        this.heightLabel = new JLabel("Slide to set Height");
+        this.add(heightLabel);
 
-        this.gridHeight = new JSlider(15, 30, this.gWidth);
+        this.gridHeight = new JSlider(15, 40, this.gWidth);
         this.gridHeight.setMajorTickSpacing(5);
         this.gridHeight.setMinorTickSpacing(1);
         this.gridHeight.setPaintTicks(true);
         this.gridHeight.setPaintLabels(true);
-        this.gridHeight.setPreferredSize(new Dimension(this.width, this.height / 4));
+        this.gridHeight.setPreferredSize(new Dimension(this.width, this.height / 5));
 
         this.gridHeight.addKeyListener(this);
         this.gridHeight.addChangeListener(e -> this.gHeight = this.gridHeight.getValue());
@@ -84,6 +90,9 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         this.speed.setVisible(true);
         this.gridWidth.setVisible(true);
         this.gridHeight.setVisible(true);
+        this.speedLabel.setVisible(true);
+        this.heightLabel.setVisible(true);
+        this.widthLabel.setVisible(true);
         this.game = null;
         this.repaint();
     }
@@ -159,6 +168,9 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
             this.instructions.setVisible(false);
             this.gridWidth.setVisible(false);
             this.gridHeight.setVisible(false);
+            this.speedLabel.setVisible(false);
+            this.heightLabel.setVisible(false);
+            this.widthLabel.setVisible(false);
             this.timer.start();
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

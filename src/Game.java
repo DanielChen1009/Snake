@@ -58,7 +58,7 @@ public class Game {
             }
         }
         this.snake = new LinkedList<>();
-        this.head = new Point(width / 2, height / 2);
+        this.head = new Point(this.width / 2, this.height / 2);
         this.snake.add(this.head);
         setState(this.head, State.SNAKE);
         this.currentDir = Direction.UP;
@@ -94,18 +94,19 @@ public class Game {
             this.alive = false;
             return;
         }
-        this.snake.add(newHead);
         setState(newHead, State.SNAKE);
-        setState(this.snake.poll(), State.EMPTY);
+        this.snake.add(newHead);
+        if (checkFood()) {
+            setState(this.snake.peek(), State.SNAKE);
+            createFood();
+        } else {
+            setState(this.snake.poll(), State.EMPTY);
+        }
         this.head = newHead;
-        this.checkFood();
     }
 
-    public void checkFood() {
-        if (food.equals(head)) {
-            snake.add(head);
-            createFood();
-        }
+    public boolean checkFood() {
+        return food.equals(head);
     }
 
     public State[][] getGrid() {
@@ -114,10 +115,6 @@ public class Game {
 
     public Queue<Point> getSnake() {
         return snake;
-    }
-
-    public void setCurrentDir(Direction currentDir) {
-        this.currentDir = currentDir;
     }
 
     public Point getFood() {
@@ -138,5 +135,9 @@ public class Game {
 
     public Direction getCurrentDir() {
         return currentDir;
+    }
+
+    public void setCurrentDir(Direction currentDir) {
+        this.currentDir = currentDir;
     }
 }
