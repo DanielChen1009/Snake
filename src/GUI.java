@@ -76,7 +76,6 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         this.add(instructions);
 
         this.renderTitleScreen();
-        this.gHeight = 20;
         this.addKeyListener(this);
     }
 
@@ -110,10 +109,10 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         if (game == null) {
             return;
         }
-        int width = this.getWidth() / this.game.getGrid().length;
-        int height = this.getHeight() / this.game.getGrid()[0].length;
-        for (int i = 0; i < this.game.getGrid()[0].length; ++i) {
-            for (int j = 0; j < this.game.getGrid().length; ++j) {
+        int width = this.getWidth() / gWidth;
+        int height = this.getHeight() / gHeight;
+        for (int i = 0; i < gHeight; ++i) {
+            for (int j = 0; j < gWidth; ++j) {
                 State state = this.game.getGrid()[j][i];
                 switch (state) {
                     case EMPTY:

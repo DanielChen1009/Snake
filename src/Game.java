@@ -78,7 +78,7 @@ public class Game {
     private void createFood() {
         Random rand = new Random();
         do {
-            food = new Point(rand.nextInt(this.height), rand.nextInt(this.width));
+            food = new Point(rand.nextInt(this.width), rand.nextInt(this.height));
         } while (getState(food) != State.EMPTY);
 
         setState(food, State.FOOD);
