@@ -13,7 +13,7 @@ enum Direction {
 }
 
 enum State {
-    EMPTY, SNAKE, FOOD;
+    EMPTY, SNAKE, FOOD
 }
 
 class Point {
@@ -78,7 +78,7 @@ public class Game {
     private void createFood() {
         Random rand = new Random();
         do {
-            food = new Point(rand.nextInt(this.width), rand.nextInt(this.height));
+            food = new Point(rand.nextInt(this.height), rand.nextInt(this.width));
         } while (getState(food) != State.EMPTY);
 
         setState(food, State.FOOD);
@@ -124,8 +124,8 @@ public class Game {
         return this.food;
     }
 
-    public boolean isAlive() {
-        return this.alive;
+    public boolean isNotAlive() {
+        return !this.alive;
     }
 
     public boolean isOutOfBounds(Point newHead) {

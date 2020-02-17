@@ -10,13 +10,13 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     // Pixel width and height of Panel.
     private int width, height;
     // Grid width and height.
-    private int gWidth, gHeight;
+    private int gWidth = 20;
+    private int gHeight;
     private Timer timer;
     private Game game;
     private int delay = 100;
-    private JSlider speed;
+    private JSlider speed, gridWidth, gridHeight;
     // private JSlider pixelSize;
-    private JSlider gridSize;
     private JLabel instructions;
 
     public GUI(int width, int height) {
@@ -48,12 +48,34 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         this.speed.addChangeListener(e -> delay = speed.getValue());
         this.add(speed);
 
+        // Creates width and height slider
+        this.gridWidth = new JSlider(15, 30, gWidth);
+        this.gridWidth.setMajorTickSpacing(5);
+        this.gridWidth.setMinorTickSpacing(1);
+        this.gridWidth.setPaintTicks(true);
+        this.gridWidth.setPaintLabels(true);
+        this.gridWidth.setPreferredSize(new Dimension(this.width, this.height / 4));
+
+        this.gridWidth.addKeyListener(this);
+        this.gridWidth.addChangeListener(e -> gWidth = gridWidth.getValue());
+        this.add(gridWidth);
+
+
+        this.gridHeight = new JSlider(15, 30, gWidth);
+        this.gridHeight.setMajorTickSpacing(5);
+        this.gridHeight.setMinorTickSpacing(1);
+        this.gridHeight.setPaintTicks(true);
+        this.gridHeight.setPaintLabels(true);
+        this.gridHeight.setPreferredSize(new Dimension(this.width, this.height / 4));
+
+        this.gridHeight.addKeyListener(this);
+        this.gridHeight.addChangeListener(e -> gHeight = gridHeight.getValue());
+        this.add(gridHeight);
 
         this.instructions = new JLabel("Press Enter to Start");
         this.add(instructions);
 
         this.renderTitleScreen();
-        this.gWidth = 20;
         this.gHeight = 20;
         this.addKeyListener(this);
     }
@@ -61,6 +83,8 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     private void renderTitleScreen() {
         this.instructions.setVisible(true);
         this.speed.setVisible(true);
+        this.gridWidth.setVisible(true);
+        this.gridHeight.setVisible(true);
         this.game = null;
         this.repaint();
     }
@@ -69,7 +93,7 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent evt) {
         if (game == null) return;
         this.game.update();
-        if (!this.game.isAlive()) {
+        if (this.game.isNotAlive()) {
             this.timer.stop();
         }
         this.repaint();
@@ -88,8 +112,8 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         }
         int width = this.getWidth() / this.game.getGrid().length;
         int height = this.getHeight() / this.game.getGrid()[0].length;
-        for (int i = 0; i < this.game.getGrid().length; ++i) {
-            for (int j = 0; j < this.game.getGrid()[0].length; ++j) {
+        for (int i = 0; i < this.game.getGrid()[0].length; ++i) {
+            for (int j = 0; j < this.game.getGrid().length; ++j) {
                 State state = this.game.getGrid()[j][i];
                 switch (state) {
                     case EMPTY:
@@ -102,12 +126,12 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
                         g.setColor(Color.GREEN);
                         break;
                 }
-                g.fillRect(j * (int) width, i * (int) height, (int) width, (int) height);
+                g.fillRect(j * width, i * height, width, height);
             }
         }
         g.setColor(Color.BLUE);
         g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, 12));
-        if (!this.game.isAlive())
+        if (this.game.isNotAlive())
             g.drawString("GAME OVER, press enter to restart. Score: " + (this.game.getSnake().size() - 1), 10, 15);
     }
 
@@ -134,9 +158,11 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
             this.game = new Game(this.gWidth, this.gHeight);
             this.speed.setVisible(false);
             this.instructions.setVisible(false);
+            this.gridWidth.setVisible(false);
+            this.gridHeight.setVisible(false);
             this.timer.start();
         }
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.renderTitleScreen();
         }
     }
