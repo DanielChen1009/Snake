@@ -52,27 +52,51 @@ public class Game {
 
     public void reset() {
         this.grid = new State[this.width][this.height];
+        for (int i = 0; i < this.width; ++i) {
+            for (int j = 0; j < this.height; ++j) {
+                this.grid[i][j] = State.EMPTY;
+            }
+        }
         this.snake = new LinkedList<>();
-        this.head = new Point(7, 7);
+        this.head = new Point(width / 2, height / 2);
         this.snake.add(this.head);
+        setState(this.head, State.SNAKE);
         this.currentDir = Direction.UP;
         this.alive = true;
         this.createFood();
     }
 
+    private State getState(Point p) {
+        return this.grid[p.x][p.y];
+    }
+
+    private void setState(Point p, State state) {
+        if (p == null) return;
+        this.grid[p.x][p.y] = state;
+    }
+
     private void createFood() {
         Random rand = new Random();
-        food = new Point(rand.nextInt(grid.length), rand.nextInt(grid[0].length));
+        do {
+            food = new Point(rand.nextInt(this.width), rand.nextInt(this.height));
+        } while (getState(food) != State.EMPTY);
+
+        setState(food, State.FOOD);
     }
 
     public void update() {
         Point newHead = this.head.add(this.currentDir.delta);
-        if (checkEdges(newHead)) {
+        if (isOutOfBounds(newHead)) {
+            this.alive = false;
+            return;
+        }
+        if (hitsBody(newHead)) {
             this.alive = false;
             return;
         }
         this.snake.add(newHead);
-        this.snake.poll();
+        setState(newHead, State.SNAKE);
+        setState(this.snake.poll(), State.EMPTY);
         this.head = newHead;
         this.checkFood();
     }
@@ -104,7 +128,15 @@ public class Game {
         return this.alive;
     }
 
-    public boolean checkEdges(Point newHead) {
+    public boolean isOutOfBounds(Point newHead) {
         return newHead.x < 0 || newHead.x + 1 > grid.length || newHead.y < 0 || newHead.y + 1 > grid[0].length;
+    }
+
+    public boolean hitsBody(Point head) {
+        return getState(head) == State.SNAKE;
+    }
+
+    public Direction getCurrentDir() {
+        return currentDir;
     }
 }
