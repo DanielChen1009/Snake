@@ -36,10 +36,18 @@ public class Game {
     private Queue<Point> snake;
     private Direction currentDir;
     private Point food;
-    boolean alive;
+    private boolean alive;
+    private int width;
+    private int height;
 
     public Game(int width, int height) {
-        this.grid = new State[width][height];
+        this.width = width;
+        this.height = height;
+        reset();
+    }
+
+    public void reset() {
+        this.grid = new State[this.width][this.height];
         this.snake = new LinkedList<>();
         this.head = new Point(7, 7);
         this.snake.add(this.head);
@@ -55,7 +63,7 @@ public class Game {
 
     public void update() {
         Point newHead = this.head.add(this.currentDir.delta);
-        if(checkEdges())  {
+        if(checkEdges(newHead))  {
             this.alive = false;
             return;
         }
@@ -84,7 +92,7 @@ public class Game {
         return this.alive;
     }
 
-    public boolean checkEdges() {
-        return head.x < 0 || head.x + 1 > grid.length || head.y < 0 || head.y + 1 > grid[0].length;
+    public boolean checkEdges(Point newHead) {
+        return newHead.x < 0 || newHead.x + 1 > grid.length || newHead.y < 0 || newHead.y + 1 > grid[0].length;
     }
 }

@@ -75,6 +75,10 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             this.game.setCurrentDir(Direction.DOWN);
         }
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.game.reset();
+            this.timer.restart();
+        }
     }
 
     @Override
