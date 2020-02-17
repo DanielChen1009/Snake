@@ -25,7 +25,7 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
 
 
         // Creates speed slider that will control the Speed of the Snake.
-        this.speed = new JSlider(50, 250, delay);
+        this.speed = new JSlider(50, 250, this.delay);
         this.speed.setMajorTickSpacing(50);
         this.speed.setMinorTickSpacing(25);
         this.speed.setPaintTicks(true);
@@ -45,11 +45,11 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
 
         this.speed.setInverted(true);
         this.speed.addKeyListener(this);
-        this.speed.addChangeListener(e -> delay = speed.getValue());
+        this.speed.addChangeListener(e -> this.delay = this.speed.getValue());
         this.add(speed);
 
         // Creates width and height slider
-        this.gridWidth = new JSlider(15, 30, gWidth);
+        this.gridWidth = new JSlider(15, 30, this.gWidth);
         this.gridWidth.setMajorTickSpacing(5);
         this.gridWidth.setMinorTickSpacing(1);
         this.gridWidth.setPaintTicks(true);
@@ -57,11 +57,11 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         this.gridWidth.setPreferredSize(new Dimension(this.width, this.height / 4));
 
         this.gridWidth.addKeyListener(this);
-        this.gridWidth.addChangeListener(e -> gWidth = gridWidth.getValue());
+        this.gridWidth.addChangeListener(e -> this.gWidth = this.gridWidth.getValue());
         this.add(gridWidth);
 
 
-        this.gridHeight = new JSlider(15, 30, gWidth);
+        this.gridHeight = new JSlider(15, 30, this.gWidth);
         this.gridHeight.setMajorTickSpacing(5);
         this.gridHeight.setMinorTickSpacing(1);
         this.gridHeight.setPaintTicks(true);
@@ -69,7 +69,7 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
         this.gridHeight.setPreferredSize(new Dimension(this.width, this.height / 4));
 
         this.gridHeight.addKeyListener(this);
-        this.gridHeight.addChangeListener(e -> gHeight = gridHeight.getValue());
+        this.gridHeight.addChangeListener(e -> this.gHeight = this.gridHeight.getValue());
         this.add(gridHeight);
 
         this.instructions = new JLabel("Press Enter to Start");
@@ -90,7 +90,7 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        if (game == null) return;
+        if (this.game == null) return;
         this.game.update();
         if (this.game.isNotAlive()) {
             this.timer.stop();
@@ -106,13 +106,13 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (game == null) {
+        if (this.game == null) {
             return;
         }
-        int width = this.getWidth() / gWidth;
-        int height = this.getHeight() / gHeight;
-        for (int i = 0; i < gHeight; ++i) {
-            for (int j = 0; j < gWidth; ++j) {
+        int width = this.getWidth() / this.gWidth;
+        int height = this.getHeight() / this.gHeight;
+        for (int i = 0; i < this.gHeight; ++i) {
+            for (int j = 0; j < this.gWidth; ++j) {
                 State state = this.game.getGrid()[j][i];
                 switch (state) {
                     case EMPTY:
