@@ -27,6 +27,10 @@ class Point {
     Point add(Point other) {
         return new Point(this.x + other.x, this.y + other.y);
     }
+
+    boolean equals(Point o) {
+        return x == o.x && y == o.y;
+    }
 }
 
 public class Game {
@@ -63,13 +67,21 @@ public class Game {
 
     public void update() {
         Point newHead = this.head.add(this.currentDir.delta);
-        if(checkEdges(newHead))  {
+        if (checkEdges(newHead)) {
             this.alive = false;
             return;
         }
         this.snake.add(newHead);
         this.snake.poll();
         this.head = newHead;
+        this.checkFood();
+    }
+
+    public void checkFood() {
+        if (food.equals(head)) {
+            snake.add(head);
+            createFood();
+        }
     }
 
     public State[][] getGrid() {
