@@ -9,12 +9,12 @@ import java.util.Hashtable;
 public class GUI extends JPanel implements ActionListener, KeyListener {
     // Pixel width and height of Panel.
     private int width, height;
+    private int delay;
     // Grid width and height.
-    private int gWidth = 20;
-    private int gHeight = 20;
+    private int gWidth;
+    private int gHeight;
     private Timer timer;
     private Game game;
-    private int delay = 100;
     private JSlider speed, gridWidth, gridHeight;
     private JLabel instructions, speedLabel, widthLabel, heightLabel;
     // private JSlider pixelSize.
@@ -22,6 +22,9 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     public GUI(int width, int height) {
         this.width = width;
         this.height = height;
+        delay = 100;
+        gWidth = 20;
+        gHeight = 20;
 
         this.speedLabel = new JLabel("Slide to set Speed");
         this.add(speedLabel);
@@ -162,7 +165,6 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
             this.game.setCurrentDir(Direction.DOWN);
         }
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            this.timer = new Timer(delay, this);
             this.game = new Game(this.gWidth, this.gHeight);
             this.speed.setVisible(false);
             this.instructions.setVisible(false);
@@ -171,10 +173,12 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
             this.speedLabel.setVisible(false);
             this.heightLabel.setVisible(false);
             this.widthLabel.setVisible(false);
+            this.timer = new Timer(delay, this);
             this.timer.start();
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.renderTitleScreen();
+            this.timer.stop();
         }
     }
 
