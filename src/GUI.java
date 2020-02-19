@@ -18,6 +18,7 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
     private JSlider speed, gridWidth, gridHeight;
     private JLabel instructions, speedLabel, widthLabel, heightLabel;
     // private JSlider pixelSize.
+    private boolean isDepressed;
 
     public GUI(int width, int height) {
         this.width = width;
@@ -152,16 +153,15 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (isDepressed) return;
+        isDepressed = true;
         if (e.getKeyCode() == KeyEvent.VK_RIGHT && this.game.getCurrentDir() != Direction.LEFT) {
             this.game.setCurrentDir(Direction.RIGHT);
-        }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT && this.game.getCurrentDir() != Direction.RIGHT) {
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && this.game.getCurrentDir() != Direction.RIGHT) {
             this.game.setCurrentDir(Direction.LEFT);
-        }
-        if (e.getKeyCode() == KeyEvent.VK_UP && this.game.getCurrentDir() != Direction.DOWN) {
+        } else if (e.getKeyCode() == KeyEvent.VK_UP && this.game.getCurrentDir() != Direction.DOWN) {
             this.game.setCurrentDir(Direction.UP);
-        }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN && this.game.getCurrentDir() != Direction.UP) {
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && this.game.getCurrentDir() != Direction.UP) {
             this.game.setCurrentDir(Direction.DOWN);
         }
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -180,9 +180,12 @@ public class GUI extends JPanel implements ActionListener, KeyListener {
             this.renderTitleScreen();
             this.timer.stop();
         }
+        isDepressed = false;
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+
     }
 }
